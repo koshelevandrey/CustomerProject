@@ -2,6 +2,8 @@
 using Xunit;
 using CustomerLibrary;
 using System.Collections.Generic;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace CustomerTests
 {
@@ -66,9 +68,10 @@ namespace CustomerTests
             customer.Email = "petrov123@mail.ru";
             customer.TotalPurchasesAmount = .01m;
 
-            List<string> errors = CustomerValidator.Validate(customer);
+            CustomerValidator validator = new CustomerValidator();
+            ValidationResult result = validator.Validate(customer);
 
-            Assert.True(errors.Count == 0);
+            Assert.True(result.IsValid);
         }
 
         [Fact]
@@ -81,16 +84,18 @@ namespace CustomerTests
             customer.PhoneNumber = "0123";
             customer.Email = "petrov123-@-mail.ru.";
 
-            List<string> errors = CustomerValidator.Validate(customer);
+            CustomerValidator validator = new CustomerValidator();
+            ValidationResult result = validator.Validate(customer);
 
-            Assert.True(errors.Count == 6);
+            Assert.True(!result.IsValid);
+            Assert.True(result.Errors.Count == 6);
 
-            Assert.True(errors[0] == "First name is longer than 50 char");
-            Assert.True(errors[1] == "Last name is longer than 50 char");
-            Assert.True(errors[2] == "Addresses list must contain at least 1 address");
-            Assert.True(errors[3] == "Phone number is not in E.164 format");
-            Assert.True(errors[4] == "Email is not valid");
-            Assert.True(errors[5] == "Notes cannot be empty, at least 1 note must be provided");
+            Assert.True(result.Errors[0].ErrorMessage == "First name should not be longer than 50 chars");
+            Assert.True(result.Errors[1].ErrorMessage == "Last name should not be null or longer than 50 chars");
+            Assert.True(result.Errors[2].ErrorMessage == "Addresses list must be not null and not empty");
+            Assert.True(result.Errors[3].ErrorMessage == "Phone number must be in E.164 format");
+            Assert.True(result.Errors[4].ErrorMessage == "Email must be valid");
+            Assert.True(result.Errors[5].ErrorMessage == "Notes list must be not null and not empty");
         }
     }
 }

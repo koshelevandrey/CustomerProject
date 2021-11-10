@@ -1,41 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using FluentValidation;
 
 namespace CustomerLibrary
 {
-    public class CustomerValidator
+    public class CustomerValidator : AbstractValidator<Customer>
     {
-        public static List<string> Validate(Customer customer)
+        public CustomerValidator()
         {
-            List<string> errors = new List<string>();
-            if ((customer.FirstName != null) && (customer.FirstName.Length > 50))
-            {
-                errors.Add("First name is longer than 50 char");
-            }
-            if (customer.LastName.Length > 50)
-            {
-                errors.Add("Last name is longer than 50 char");
-            }
-            if ((customer.Addresses == null) || (customer.Addresses.Count == 0))
-            {
-                errors.Add("Addresses list must contain at least 1 address");
-            }
-            if ((customer.PhoneNumber != null) && !(Regex.IsMatch(customer.PhoneNumber, @"^\+?[1-9]\d{1,14}$")))
-            {
-                errors.Add("Phone number is not in E.164 format");
-            }
-            if ((customer.Email != null) && !(Regex.IsMatch(customer.Email,
-                @"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")))
-            {
-                errors.Add("Email is not valid");
-            }
-            if ((customer.Notes == null) || (customer.Notes.Count == 0))
-            {
-                errors.Add("Notes cannot be empty, at least 1 note must be provided");
-            }
+            RuleFor(customer => customer.FirstName).Length(0, 50).When(customer => customer.FirstName != null)
+                .WithMessage("First name should not be longer than 50 chars");
+            RuleFor(customer => customer.LastName).NotNull().Length(0, 50)
+                .WithMessage("Last name should not be null or longer than 50 chars");
+            RuleFor(customer => customer.Addresses).NotNull().NotEmpty()
+                .WithMessage("Addresses list must be not null and not empty");
+            RuleFor(customer => customer.PhoneNumber).Must(BeInE164Format).When(customer => customer.PhoneNumber != null)
+                .WithMessage("Phone number must be in E.164 format");
+            RuleFor(customer => customer.Email).Must(BeValidEmail).When(customer => customer.Email != null)
+                .WithMessage("Email must be valid");
+            RuleFor(customer => customer.Notes).NotNull().NotEmpty()
+                .WithMessage("Notes list must be not null and not empty");
+        }
 
-            return errors;
+        private bool BeInE164Format(string phoneNumber)
+        {
+            return Regex.IsMatch(phoneNumber, @"^\+?[1-9]\d{1,14}$");
+        }
+
+        private bool BeValidEmail(string email)
+        {
+            return Regex.IsMatch(email,
+                @"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
         }
     }
 }
