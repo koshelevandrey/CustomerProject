@@ -18,15 +18,26 @@ namespace CustomerTests
             notes.Add("note 1");
             notes.Add("note 2");
             Customer customer = new Customer("Petrov", addresses, notes);
+            customer.FirstName = "Ivan";
             customer.PhoneNumber = "+195534912";
             customer.Email = "petrov123@mail.ru";
             customer.TotalPurchasesAmount = .01m;
 
             Assert.NotNull(customer);
+
+            Assert.True(customer.FirstName == "Ivan");
+            Assert.True(customer.LastName == "Petrov");
+            Assert.True(customer.Addresses == addresses);
+            Assert.True(customer.Addresses[0] == address);
+            Assert.True(customer.Notes == notes);
+            Assert.True(customer.Notes[0] == "note 1");
+            Assert.True(customer.PhoneNumber == "+195534912");
+            Assert.True(customer.Email == "petrov123@mail.ru");
+            Assert.True(customer.TotalPurchasesAmount == .01m);
         }
 
         [Fact]
-        public void ShouldNotBeAbleToMakeTotalPurchaseAmountNull()
+        public void ShouldBeAbleToMakeTotalPurchaseAmountNull()
         {
             List<Address> addresses = new List<Address>();
             Address address = new Address("Pushkin street", AddressType.Billing, "Moscow", "5724", "Unknown", "United States");
@@ -55,7 +66,7 @@ namespace CustomerTests
             customer.Email = "petrov123@mail.ru";
             customer.TotalPurchasesAmount = .01m;
 
-            List<string> errors = customer.Validate();
+            List<string> errors = CustomerValidator.Validate(customer);
 
             Assert.True(errors.Count == 0);
         }
@@ -70,7 +81,7 @@ namespace CustomerTests
             customer.PhoneNumber = "0123";
             customer.Email = "petrov123-@-mail.ru.";
 
-            List<string> errors = customer.Validate();
+            List<string> errors = CustomerValidator.Validate(customer);
 
             Assert.True(errors.Count == 6);
 

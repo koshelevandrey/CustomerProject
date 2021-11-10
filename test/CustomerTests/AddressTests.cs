@@ -14,6 +14,14 @@ namespace CustomerTests
             address.Line2 = "5 house";
 
             Assert.NotNull(address);
+
+            Assert.True(address.Line == "Pushkin street");
+            Assert.True(address.Line2 == "5 house");
+            Assert.True(address.Type == AddressType.Billing);
+            Assert.True(address.City == "Moscow");
+            Assert.True(address.PostalCode == "5724");
+            Assert.True(address.State == "Unknown");
+            Assert.True(address.Country == "United States");
         }
 
         [Fact]
@@ -21,7 +29,7 @@ namespace CustomerTests
         {
             Address address = new Address("Pushkin street", AddressType.Billing, "Moscow", "5724", "Unknown", "United States");
             address.Line2 = "5 house";
-            List<string> errors = address.Validate();
+            List<string> errors = AddressValidator.Validate(address);
 
             Assert.True(errors.Count == 0);
         }
@@ -32,7 +40,7 @@ namespace CustomerTests
             Address address = new Address(new string('a', 101), AddressType.Billing,
                 new string('a', 51), "5724341", new string('a', 21), "Russia");
             address.Line2 = new string('b', 101);
-            List<string> errors = address.Validate();
+            List<string> errors = AddressValidator.Validate(address);
 
             Assert.True(errors.Count == 6);
 

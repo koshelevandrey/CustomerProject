@@ -10,7 +10,6 @@ namespace CustomerLibrary
         public Person(string lastName)
         {
             LastName = lastName;
-            FirstName = "";
         }
     }
 }
