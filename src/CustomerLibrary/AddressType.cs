@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomerProject
+namespace CustomerLibrary
 {
     public enum AddressType
     {

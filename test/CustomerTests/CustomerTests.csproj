@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CustomerProject\CustomerProject.csproj" />
+    <ProjectReference Include="..\..\src\CustomerLibrary\CustomerLibrary.csproj" />
   </ItemGroup>
 
 </Project>

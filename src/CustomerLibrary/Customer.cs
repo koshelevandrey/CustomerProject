@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace CustomerProject
+namespace CustomerLibrary
 {
     public class Customer : Person
     {
@@ -37,7 +37,7 @@ namespace CustomerProject
             {
                 errors.Add("Phone number is not in E.164 format");
             }
-            if ((Email != null) &&!(Regex.IsMatch(Email,
+            if ((Email != null) && !(Regex.IsMatch(Email,
                 @"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")))
             {
                 errors.Add("Email is not valid");

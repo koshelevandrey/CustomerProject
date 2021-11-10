@@ -1,9 +1,9 @@
 using System;
 using Xunit;
-using CustomerProject;
+using CustomerLibrary;
 using System.Collections.Generic;
 
-namespace AddressTest
+namespace CustomerTests
 {
     public class AddressTests
     {

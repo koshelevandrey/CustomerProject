@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CustomerProject
+namespace CustomerLibrary
 {
     public class Address
     {
