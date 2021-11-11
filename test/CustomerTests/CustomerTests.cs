@@ -27,15 +27,16 @@ namespace CustomerTests
 
             Assert.NotNull(customer);
 
-            Assert.True(customer.FirstName == "Ivan");
-            Assert.True(customer.LastName == "Petrov");
-            Assert.True(customer.Addresses == addresses);
-            Assert.True(customer.Addresses[0] == address);
-            Assert.True(customer.Notes == notes);
-            Assert.True(customer.Notes[0] == "note 1");
-            Assert.True(customer.PhoneNumber == "+195534912");
-            Assert.True(customer.Email == "petrov123@mail.ru");
-            Assert.True(customer.TotalPurchasesAmount == .01m);
+            Assert.Equal("Ivan", customer.FirstName);
+            Assert.Equal("Petrov", customer.LastName);
+            Assert.Equal(addresses, customer.Addresses);
+            Assert.Equal(address, customer.Addresses[0]);
+            Assert.Equal(notes, customer.Notes);
+            Assert.Equal("note 1", customer.Notes[0]);
+            Assert.Equal("note 2", customer.Notes[1]);
+            Assert.Equal("+195534912", customer.PhoneNumber);
+            Assert.Equal("petrov123@mail.ru", customer.Email);
+            Assert.Equal(.01m, customer.TotalPurchasesAmount);
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace CustomerTests
             notes.Add("note 1");
             Customer customer = new Customer("Petrov", addresses, notes);
 
-            Assert.True(customer.TotalPurchasesAmount == null);
+            Assert.Null(customer.TotalPurchasesAmount);
         }
 
         [Fact]
@@ -88,14 +89,14 @@ namespace CustomerTests
             ValidationResult result = validator.Validate(customer);
 
             Assert.True(!result.IsValid);
-            Assert.True(result.Errors.Count == 6);
+            Assert.Equal(6, result.Errors.Count);
 
-            Assert.True(result.Errors[0].ErrorMessage == "First name should not be longer than 50 chars");
-            Assert.True(result.Errors[1].ErrorMessage == "Last name should not be null or longer than 50 chars");
-            Assert.True(result.Errors[2].ErrorMessage == "Addresses list must be not null and not empty");
-            Assert.True(result.Errors[3].ErrorMessage == "Phone number must be in E.164 format");
-            Assert.True(result.Errors[4].ErrorMessage == "Email must be valid");
-            Assert.True(result.Errors[5].ErrorMessage == "Notes list must be not null and not empty");
+            Assert.Equal("First name should not be longer than 50 chars", result.Errors[0].ErrorMessage);
+            Assert.Equal("Last name should not be null or longer than 50 chars", result.Errors[1].ErrorMessage);
+            Assert.Equal("Addresses list must be not null and not empty",  result.Errors[2].ErrorMessage);
+            Assert.Equal("Phone number must be in E.164 format", result.Errors[3].ErrorMessage);
+            Assert.Equal("Email must be valid", result.Errors[4].ErrorMessage);
+            Assert.Equal("Notes list must be not null and not empty", result.Errors[5].ErrorMessage);
         }
     }
 }
