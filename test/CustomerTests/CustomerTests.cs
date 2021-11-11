@@ -25,15 +25,16 @@ namespace CustomerTests
 
             Assert.NotNull(customer);
 
-            Assert.True(customer.FirstName == "Ivan");
-            Assert.True(customer.LastName == "Petrov");
-            Assert.True(customer.Addresses == addresses);
-            Assert.True(customer.Addresses[0] == address);
-            Assert.True(customer.Notes == notes);
-            Assert.True(customer.Notes[0] == "note 1");
-            Assert.True(customer.PhoneNumber == "+195534912");
-            Assert.True(customer.Email == "petrov123@mail.ru");
-            Assert.True(customer.TotalPurchasesAmount == .01m);
+            Assert.Equal("Ivan", customer.FirstName);
+            Assert.Equal("Petrov", customer.LastName);
+            Assert.Equal(addresses, customer.Addresses);
+            Assert.Equal(address, customer.Addresses[0]);
+            Assert.Equal(notes, customer.Notes);
+            Assert.Equal("note 1", customer.Notes[0]);
+            Assert.Equal("note 2", customer.Notes[1]);
+            Assert.Equal("+195534912", customer.PhoneNumber);
+            Assert.Equal("petrov123@mail.ru", customer.Email);
+            Assert.Equal(.01m, customer.TotalPurchasesAmount);
         }
 
         [Fact]
@@ -47,7 +48,7 @@ namespace CustomerTests
             notes.Add("note 1");
             Customer customer = new Customer("Petrov", addresses, notes);
 
-            Assert.True(customer.TotalPurchasesAmount == null);
+            Assert.Null(customer.TotalPurchasesAmount);
         }
 
         [Fact]
@@ -68,7 +69,7 @@ namespace CustomerTests
 
             List<string> errors = CustomerValidator.Validate(customer);
 
-            Assert.True(errors.Count == 0);
+            Assert.Empty(errors);
         }
 
         [Fact]
@@ -83,14 +84,14 @@ namespace CustomerTests
 
             List<string> errors = CustomerValidator.Validate(customer);
 
-            Assert.True(errors.Count == 6);
+            Assert.Equal(6, errors.Count);
 
-            Assert.True(errors[0] == "First name is longer than 50 char");
-            Assert.True(errors[1] == "Last name is longer than 50 char");
-            Assert.True(errors[2] == "Addresses list must contain at least 1 address");
-            Assert.True(errors[3] == "Phone number is not in E.164 format");
-            Assert.True(errors[4] == "Email is not valid");
-            Assert.True(errors[5] == "Notes cannot be empty, at least 1 note must be provided");
+            Assert.Equal("First name is longer than 50 char", errors[0]);
+            Assert.Equal("Last name is longer than 50 char", errors[1]);
+            Assert.Equal("Addresses list must contain at least 1 address", errors[2]);
+            Assert.Equal("Phone number is not in E.164 format", errors[3]);
+            Assert.Equal("Email is not valid", errors[4]);
+            Assert.Equal("Notes cannot be empty, at least 1 note must be provided", errors[5]);
         }
     }
 }

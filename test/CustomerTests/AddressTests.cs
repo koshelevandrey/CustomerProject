@@ -15,13 +15,13 @@ namespace CustomerTests
 
             Assert.NotNull(address);
 
-            Assert.True(address.Line == "Pushkin street");
-            Assert.True(address.Line2 == "5 house");
-            Assert.True(address.Type == AddressType.Billing);
-            Assert.True(address.City == "Moscow");
-            Assert.True(address.PostalCode == "5724");
-            Assert.True(address.State == "Unknown");
-            Assert.True(address.Country == "United States");
+            Assert.Equal("Pushkin street", address.Line);
+            Assert.Equal("5 house", address.Line2);
+            Assert.Equal(AddressType.Billing, address.Type);
+            Assert.Equal("Moscow", address.City);
+            Assert.Equal("5724", address.PostalCode);
+            Assert.Equal("Unknown", address.State);
+            Assert.Equal("United States", address.Country);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace CustomerTests
             address.Line2 = "5 house";
             List<string> errors = AddressValidator.Validate(address);
 
-            Assert.True(errors.Count == 0);
+            Assert.Empty(errors);
         }
 
         [Fact]
@@ -42,14 +42,14 @@ namespace CustomerTests
             address.Line2 = new string('b', 101);
             List<string> errors = AddressValidator.Validate(address);
 
-            Assert.True(errors.Count == 6);
+            Assert.Equal(6, errors.Count);
 
-            Assert.True(errors[0] == "Line is longer than 100 char");
-            Assert.True(errors[1] == "Line 2 is longer than 100 char");
-            Assert.True(errors[2] == "City is longer than 50 char");
-            Assert.True(errors[3] == "Postal code is longer than 6 char");
-            Assert.True(errors[4] == "State is longer than 20 char");
-            Assert.True(errors[5] == "Wrong country name (only United States and Canada are accepted)");
+            Assert.Equal("Line is longer than 100 char", errors[0]);
+            Assert.Equal("Line 2 is longer than 100 char", errors[1]);
+            Assert.Equal("City is longer than 50 char", errors[2]);
+            Assert.Equal("Postal code is longer than 6 char", errors[3]);
+            Assert.Equal("State is longer than 20 char", errors[4]);
+            Assert.Equal("Wrong country name (only United States and Canada are accepted)", errors[5]);
         }
     }
 }
